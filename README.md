@@ -36,6 +36,18 @@ Tips and troubleshooting
 Notes:
 - This uses `ng serve` for development; you need the Angular CLI to be installed locally.
 
+Windows notes
+- If Electron doesn't open on Windows when you run `npm run start`, run the two parts separately to diagnose:
+	- Start Angular dev server:
+		```bash
+		npm run start:ng
+		```
+	- In another shell, start electron (ensuring `ELECTRON_DEV` is set):
+		```bash
+		npm run start:electron:dev
+		```
+	Using `npm run start` runs both in one shot using `concurrently`, which is cross-platform friendly.
+
 Local API server
 - This Electron app starts a small local HTTP API when Electron launches. The API listens by default on port 3000 (falls back to an ephemeral port if 3000 is busy). Available endpoints:
 	- `GET /ping` - returns { message: 'pong from api' }

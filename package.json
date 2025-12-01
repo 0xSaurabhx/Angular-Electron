@@ -6,11 +6,12 @@
   "main": "electron/main.js",
   "scripts": {
     "ng": "ng",
-    "start:angular": "ng serve",
+    "start:ng": "ng serve",
+    "start:electron:dev": "cross-env ELECTRON_DEV=true wait-on http://localhost:4200 && electron .",
     "start:electron": "wait-on http://localhost:4200 && electron .",
-    "start": "concurrently \"ng serve\" \"cross-env ELECTRON_DEV=true bash -lc 'wait-on http://localhost:4200 && electron .'\"",
+    "start": "concurrently \"npm: start:ng\" \"npm: start:electron:dev\"",
     "build": "ng build --output-path=dist/angular --prod",
-    "electron:prod": "NODE_ENV=production electron .",
+    "electron:prod": "cross-env NODE_ENV=production electron .",
     "package": "npm run build && electron-builder"
   },
   "author": "",
