@@ -48,3 +48,11 @@ function startServer(preferredPort = 3000) {
 }
 
 module.exports = { startServer };
+
+// Allow the server to be started standalone for testing: `node electron/server.js`
+if (require.main === module) {
+  startServer(3000).then(({ port }) => console.log(`Started server on ${port}`)).catch(err => {
+    console.error('Failed to start server', err);
+    process.exit(1);
+  });
+}

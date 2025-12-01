@@ -44,9 +44,11 @@ function createWindow() {
   });
 }
 
+let _apiServer = null;
 app.whenReady().then(async () => {
   try {
-    const { port } = await startServer(3000);
+    const { port, server } = await startServer(3000);
+    _apiServer = server;
     global.API_URL = `http://localhost:${port}`;
     ipcMain.handle('get-api-url', () => global.API_URL);
     console.log('[electron:api] API running at', global.API_URL);
@@ -66,6 +68,17 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   if (mainWindow === null) createWindow();
+});
+
+// Clean up server on quit
+app.on('will-quit', () => {
+  if (_apiServer) {
+    try {
+      _apiServer.close(() => console.log('[electron:api] Server shutdown'));
+    } catch (err) {
+      console.warn('[electron:api] Failed shutting down server:', err);
+    }
+  }
 });
 
 ipcMain.handle('ping', async () => {
